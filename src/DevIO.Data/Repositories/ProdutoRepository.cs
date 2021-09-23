@@ -27,7 +27,7 @@ namespace DevIO.Data.Repositories
 
         public async Task<IEnumerable<Produto>> ObterProdutoPorFornecedor(Guid fornecedorId)
         {
-            return await Search(p => p.FornecedorId == fornecedorId);
+            return await Buscar(p => p.FornecedorId == fornecedorId);
         }
 
         public async Task<IEnumerable<Produto>> ObterProdutosFornecedores()

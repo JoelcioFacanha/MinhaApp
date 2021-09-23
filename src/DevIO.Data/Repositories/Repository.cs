@@ -21,23 +21,23 @@ namespace DevIO.Data.Repositories
             DbSet = Db.Set<T>();
         }
 
-        public virtual async Task Add(T entity)
+        public virtual async Task Adicionar(T entity)
         {
             DbSet.Add(entity);
             await SaveChanges();
         }
 
-        public virtual async Task<List<T>> GetALL()
+        public virtual async Task<List<T>> ObterTodos()
         {
             return await DbSet.ToListAsync();
         }
 
-        public virtual async Task<T> GetById(Guid id)
+        public virtual async Task<T> ObterPorId(Guid id)
         {
             return await DbSet.FindAsync(id);
         }
 
-        public virtual async Task Remove(Guid id)
+        public virtual async Task Remover(Guid id)
         {
             DbSet.Remove(new T { Id = id });
             await SaveChanges();
@@ -48,12 +48,12 @@ namespace DevIO.Data.Repositories
             return await Db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> Search(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> Buscar(Expression<Func<T, bool>> predicate)
         {
             return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
 
-        public virtual async Task Update(T entity)
+        public virtual async Task Atualizar(T entity)
         {
             DbSet.Update(entity);
             await SaveChanges();
