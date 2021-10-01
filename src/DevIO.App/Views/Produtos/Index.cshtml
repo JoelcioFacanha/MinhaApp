@@ -7,7 +7,7 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 <p>
-    <a asp-action="Create">Novo Produto</a>
+    <a asp-action="Create" class="btn btn-info">Novo Produto</a>
 </p>
 <table class="table table-hover">
     <thead class="thead-dark">
@@ -35,6 +35,7 @@
         {
             <tr>
                 <td>
+                    <img class="img-responsive full-width" style="width:70px; height:100px" src="data:imagens/jpeg;base64,@Convert.ToBase64String(item.Dados)" />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Nome)
