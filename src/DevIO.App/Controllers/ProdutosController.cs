@@ -61,14 +61,14 @@ namespace DevIO.App.Controllers
                 return View(produtoViewModel);
             }
 
-            var imgPreFixo = Guid.NewGuid() + "_";
+            //var imgPreFixo = Guid.NewGuid() + "_";
 
-            if (!await UploadArquivo(produtoViewModel.ImagemUpload, imgPreFixo, produtoViewModel))
+            if (!await UploadArquivo(produtoViewModel.ImagemUpload, produtoViewModel))
             {
                 return View(produtoViewModel);
             }
 
-            produtoViewModel.Imagem = imgPreFixo + produtoViewModel.ImagemUpload.FileName;
+            //produtoViewModel.Imagem = produtoViewModel.ImagemUpload.FileName;
 
             await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
@@ -96,14 +96,29 @@ namespace DevIO.App.Controllers
                 return NotFound();
             }
 
+            var produtoAlterado = await ObterProduto(id);
+            produtoViewModel.Fornecedor = produtoAlterado.Fornecedor;
+            produtoViewModel.Imagem = produtoAlterado.Imagem;
+
             if (!ModelState.IsValid)
             {
                 return View(produtoViewModel);
             }
 
-            var produto = _mapper.Map<Produto>(produtoViewModel);
+            if (produtoViewModel.ImagemUpload != null)
+            {
+                if (!await UploadArquivo(produtoViewModel.ImagemUpload, produtoAlterado))
+                {
+                    return View(produtoViewModel);
+                }
+            }
 
-            await _produtoRepository.Atualizar(produto);
+            produtoAlterado.Nome = produtoViewModel.Nome;
+            produtoAlterado.Descricao = produtoViewModel.Descricao;
+            produtoAlterado.Valor = produtoViewModel.Valor;
+            produtoAlterado.Ativo = produtoViewModel.Ativo;
+
+            await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoAlterado));
 
             return RedirectToAction(nameof(Index));
         }
@@ -149,27 +164,28 @@ namespace DevIO.App.Controllers
             return produto;
         }
 
-        private async Task<bool> UploadArquivo(IFormFile arquivo, string imgPreFixo, ProdutoViewModel produtoViewModel = null)
+        //private async Task<bool> UploadArquivo(IFormFile arquivo, string imgPreFixo, ProdutoViewModel produtoViewModel = null)
+        private async Task<bool> UploadArquivo(IFormFile arquivo, ProdutoViewModel produtoViewModel)
         {
             if (arquivo.Length <= 0)
             {
                 return false;
             }
 
-            var pathDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\imagens");
+            //var pathDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\imagens");
 
-            if (!Directory.Exists(pathDirectory))
-            {
-                Directory.CreateDirectory(pathDirectory);
-            }
+            //if (!Directory.Exists(pathDirectory))
+            //{
+            //    Directory.CreateDirectory(pathDirectory);
+            //}
 
-            var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPreFixo + arquivo.FileName);
+            //var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPreFixo + arquivo.FileName);
 
-            if (System.IO.File.Exists(pathImage))
-            {
-                ModelState.AddModelError(string.Empty, "Já existe um arquivo com este nome!");
-                return false;
-            }
+            //if (System.IO.File.Exists(pathImage))
+            //{
+            //    ModelState.AddModelError(string.Empty, "Já existe um arquivo com este nome!");
+            //    return false;
+            //}
 
             //using (var stream = new FileStream(pathImage, FileMode.Create))
             //{
@@ -181,7 +197,7 @@ namespace DevIO.App.Controllers
                 using (var ms = new MemoryStream())
                 {
                     await fs.CopyToAsync(ms);
-                    produtoViewModel.Dados = ms.ToArray();
+                    produtoViewModel.Imagem = ms.ToArray();
                 }
             }
 

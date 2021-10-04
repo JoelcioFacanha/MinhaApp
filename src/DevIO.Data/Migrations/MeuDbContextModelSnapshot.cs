@@ -98,9 +98,6 @@ namespace DevIO.Data.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("Dados")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
@@ -111,9 +108,8 @@ namespace DevIO.Data.Migrations
                     b.Property<Guid>("FornecedorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Imagem")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
+                    b.Property<byte[]>("Imagem")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()

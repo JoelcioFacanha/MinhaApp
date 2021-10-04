@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevIO.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    [Migration("20211001193149_ColumnDados")]
-    partial class ColumnDados
+    [Migration("20211004183715_Initial_Db")]
+    partial class Initial_Db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -100,9 +100,6 @@ namespace DevIO.Data.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("Dados")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
@@ -113,9 +110,8 @@ namespace DevIO.Data.Migrations
                     b.Property<Guid>("FornecedorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Imagem")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
+                    b.Property<byte[]>("Imagem")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
