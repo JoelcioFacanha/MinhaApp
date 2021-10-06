@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DevIO.App.Extensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,6 +24,7 @@ namespace DevIO.App.ViewModels
         [DisplayName("Imagem do Produto")]
         public IFormFile ImagemUpload { get; set; }
         public byte[] Imagem { get; set; }
+        [Moeda]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public decimal Valor { get; set; }
         [ScaffoldColumn(false)]
