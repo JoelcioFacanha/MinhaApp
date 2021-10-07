@@ -26,11 +26,13 @@ namespace DevIO.App.Controllers
             _mapper = mapper;
         }
 
+        [Route("lista-de-produtos")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores()));
         }
 
+        [Route("dados-do-produto/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
             var produtoViewModel = await ObterProduto(id);
@@ -43,6 +45,7 @@ namespace DevIO.App.Controllers
             return View(produtoViewModel);
         }
 
+        [Route("novo-produto")]
         public async Task<IActionResult> Create()
         {
             var produtoViewModel = await PopularFornecedores(new ProdutoViewModel());
@@ -50,6 +53,7 @@ namespace DevIO.App.Controllers
             return View(produtoViewModel);
         }
 
+        [Route("novo-produto")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProdutoViewModel produtoViewModel)
@@ -61,20 +65,17 @@ namespace DevIO.App.Controllers
                 return View(produtoViewModel);
             }
 
-            //var imgPreFixo = Guid.NewGuid() + "_";
-
             if (!await UploadArquivo(produtoViewModel.ImagemUpload, produtoViewModel))
             {
                 return View(produtoViewModel);
             }
-
-            //produtoViewModel.Imagem = produtoViewModel.ImagemUpload.FileName;
 
             await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("editar-produto/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var produtoViewModel = await ObterProduto(id);
@@ -87,6 +88,7 @@ namespace DevIO.App.Controllers
             return View(produtoViewModel);
         }
 
+        [Route("editar-produto/{id:guid}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ProdutoViewModel produtoViewModel)
@@ -123,6 +125,7 @@ namespace DevIO.App.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("excluir-produto/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var produtoViewModel = await ObterProduto(id);
@@ -135,6 +138,7 @@ namespace DevIO.App.Controllers
             return View(produtoViewModel);
         }
 
+        [Route("excluir-produto/{id:guid}")]
         [HttpPost, ActionName(nameof(Delete))]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -164,33 +168,12 @@ namespace DevIO.App.Controllers
             return produto;
         }
 
-        //private async Task<bool> UploadArquivo(IFormFile arquivo, string imgPreFixo, ProdutoViewModel produtoViewModel = null)
         private async Task<bool> UploadArquivo(IFormFile arquivo, ProdutoViewModel produtoViewModel)
         {
             if (arquivo.Length <= 0)
             {
                 return false;
             }
-
-            //var pathDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\imagens");
-
-            //if (!Directory.Exists(pathDirectory))
-            //{
-            //    Directory.CreateDirectory(pathDirectory);
-            //}
-
-            //var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPreFixo + arquivo.FileName);
-
-            //if (System.IO.File.Exists(pathImage))
-            //{
-            //    ModelState.AddModelError(string.Empty, "Já existe um arquivo com este nome!");
-            //    return false;
-            //}
-
-            //using (var stream = new FileStream(pathImage, FileMode.Create))
-            //{
-            //    await stream.CopyToAsync(stream);                
-            //}
 
             using (var fs = arquivo.OpenReadStream())
             {
