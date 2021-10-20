@@ -11,7 +11,7 @@ namespace DevIO.Business.Models.Validations.Documentos
         {
             var cnpjNumeros = Utils.ApenasNumeros(documento);
 
-            if (!TamanhoValido(documento))
+            if (!TamanhoValido(cnpjNumeros))
             {
                 return false;
             }
@@ -21,7 +21,7 @@ namespace DevIO.Business.Models.Validations.Documentos
 
         private static bool TamanhoValido(string documento)
         {
-            return documento.Length == TamanhoCPF;
+            return documento.Length == TamanhoCNPJ;
         }
 
         private static bool TemDigitosRepetidos(string documento)

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DevIO.Business.Services.Interfaces
 {
-    interface IProdutoService
+    public interface IProdutoService : IDisposable
     {
         Task AdicionarAsync(Produto produto);
         Task AtualizarAsync(Produto produto);
