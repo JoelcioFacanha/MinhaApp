@@ -2,6 +2,7 @@
 using DevIO.App.ViewModels;
 using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
+using DevIO.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,15 +16,19 @@ namespace DevIO.App.Controllers
     {
         private readonly IProdutoRepository _produtoRepository;
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IProdutoService _produtoService;
         private readonly IMapper _mapper;
 
         public ProdutosController(IProdutoRepository produtoRepository,
                                   IMapper mapper,
-                                  IFornecedorRepository fornecedorRepository)
+                                  IFornecedorRepository fornecedorRepository,
+                                  IProdutoService produtoService,
+                                  INotificador notificador) : base(notificador)
         {
             _produtoRepository = produtoRepository;
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
+            _produtoService = produtoService;
         }
 
         [Route("lista-de-produtos")]
@@ -70,7 +75,9 @@ namespace DevIO.App.Controllers
                 return View(produtoViewModel);
             }
 
-            await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));
+            await _produtoService.AdicionarAsync(_mapper.Map<Produto>(produtoViewModel));
+
+            if (!OperacaoValida()) return View(produtoViewModel);
 
             return RedirectToAction(nameof(Index));
         }
@@ -120,7 +127,7 @@ namespace DevIO.App.Controllers
             produtoAlterado.Valor = produtoViewModel.Valor;
             produtoAlterado.Ativo = produtoViewModel.Ativo;
 
-            await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoAlterado));
+            await _produtoService.AtualizarAsync(_mapper.Map<Produto>(produtoAlterado));
 
             return RedirectToAction(nameof(Index));
         }
@@ -150,7 +157,11 @@ namespace DevIO.App.Controllers
                 return NotFound();
             }
 
-            await _produtoRepository.Remover(id);
+            await _produtoService.RemoverAsync(id);
+
+            if (!OperacaoValida()) return View(produtoViewModel);
+
+            TempData["Sucesso"] = "Produto excluído com sucesso!";
 
             return RedirectToAction(nameof(Index));
         }
