@@ -24,10 +24,35 @@ namespace DevIO.App.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("error/{id:length(3,3)}")]
+        public IActionResult Errors(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var modelError = new ErrorViewModel();
+
+            if (id == 500)
+            {
+                modelError.Mensagem = "Ocorreu um error! Tente novamente mais tarde ou contate o suporte!";
+                modelError.Titulo = "Ocorreu um error";
+                modelError.ErrorCode = id;
+            }
+            else if (id == 404)
+            {
+                modelError.Mensagem = "A página que está procurando não existe!<br /> Em caso de dúvida entre em contato com o suporte.";
+                modelError.Titulo = "Ops! Página não encontrada";
+                modelError.ErrorCode = id;
+            }
+            else if (id == 403)
+            {
+                modelError.Mensagem = "Usuário sem premissão!";
+                modelError.Titulo = "Acesso Negado";
+                modelError.ErrorCode = id;
+            }
+            else
+            {
+                return StatusCode(404);
+            }
+
+            return View("Error", modelError);
         }
     }
 }
