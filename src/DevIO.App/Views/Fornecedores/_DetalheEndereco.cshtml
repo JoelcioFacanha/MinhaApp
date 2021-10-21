@@ -31,7 +31,7 @@
                 <td>@Html.DisplayFor(model => model.Endereco.Cidade)</td>
                 <td>@Html.DisplayFor(model => model.Endereco.Estado)</td>
                 <td>
-                    <a asp-action="AtualizarEndereco" asp-route-id="@Model.Id" class="btn btn-warning" data-modal="">
+                    <a supress-by-action="Edit, ObterEndereco" asp-action="AtualizarEndereco" asp-route-id="@Model.Id" class="btn btn-warning" data-modal="">
                         <span title="Editar" class="fa fa-pencil-alt"></span>
                     </a>
                 </td>
