@@ -60,8 +60,7 @@ namespace DevIO.App.Controllers
 
         [ClaimsAuthorizer("Fornecedor", "Adicionar")]
         [Route("novo-fornecedor")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]        
         public async Task<IActionResult> Create(FornecedorViewModel fornecedorViewModel)
         {
             if (!ModelState.IsValid)
@@ -94,8 +93,7 @@ namespace DevIO.App.Controllers
 
         [ClaimsAuthorizer("Fornecedor", "Editar")]
         [Route("editar-fornecedor/{id:guid}")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]        
         public async Task<IActionResult> Edit(Guid id, FornecedorViewModel fornecedorViewModel)
         {
             if (id != fornecedorViewModel.Id)
@@ -132,8 +130,7 @@ namespace DevIO.App.Controllers
 
         [ClaimsAuthorizer("Fornecedor", "Excluir")]
         [Route("excluir-fornecedor/{id:guid}")]
-        [HttpPost, ActionName(nameof(Delete))]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName(nameof(Delete))]        
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var fornecedorViewModel = await ObterFornecedorEndereco(id);
@@ -164,8 +161,7 @@ namespace DevIO.App.Controllers
         }
 
         [Route("atualizar-endereco-fornecedor/{id:guid}")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]        
         public async Task<IActionResult> AtualizarEndereco(FornecedorViewModel fornecedorViewModel)
         {
             ModelState.Remove("Nome");
